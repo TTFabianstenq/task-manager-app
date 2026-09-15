@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Task Manager — Download</title>
-  <meta name="description" content="Modern offline Android Task Manager. Download the APK or build from source." />
+  <meta name="description" content="Download the Task Manager Android APK." />
   <style>
     :root {
       --bg: #0f1419;
@@ -24,122 +24,46 @@
       min-height: 100vh;
       line-height: 1.6;
     }
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 2rem 1.25rem 4rem;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 3rem;
-      padding-top: 2rem;
-    }
+    .container { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+    header { text-align: center; margin-bottom: 2.5rem; padding-top: 2rem; }
     .logo {
-      width: 72px;
-      height: 72px;
+      width: 72px; height: 72px;
       background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border-radius: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.25rem;
-      font-size: 2rem;
+      border-radius: 18px; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem; font-size: 2rem;
     }
-    h1 {
-      font-size: 2.25rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-    .subtitle {
-      color: var(--muted);
-      font-size: 1.1rem;
-    }
+    h1 { font-size: 2.25rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 1.1rem; }
     .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem;
     }
-    .card h2 {
-      font-size: 1.25rem;
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card p, .card li {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-    .card ul {
-      margin: 0.75rem 0 0 1.25rem;
-    }
+    .card h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .card p, .card li { color: var(--muted); font-size: 0.95rem; }
+    .card ol, .card ul { margin: 0.75rem 0 0 1.25rem; }
     .card li { margin-bottom: 0.35rem; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--primary);
-      color: white;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 0.875rem 1.5rem;
-      border-radius: 10px;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: background 0.15s;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--primary); color: white; font-weight: 600; font-size: 1.05rem;
+      padding: 1rem 1.5rem; border-radius: 10px; text-decoration: none;
+      min-height: 48px;
     }
     .btn:hover { background: var(--primary-hover); }
     .btn-secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
+      background: transparent; border: 1px solid var(--border); color: var(--text);
     }
-    .btn-secondary:hover {
-      background: var(--border);
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1.25rem;
-    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
     .badge {
-      display: inline-block;
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      margin-bottom: 0.75rem;
+      display: inline-block; background: rgba(59, 130, 246, 0.15); color: #60a5fa;
+      font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; margin-bottom: 0.75rem;
     }
     .note {
-      background: rgba(34, 197, 94, 0.08);
-      border: 1px solid rgba(34, 197, 94, 0.25);
-      border-radius: 10px;
-      padding: 1rem 1.25rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-top: 1rem;
+      background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25);
+      border-radius: 10px; padding: 1rem 1.25rem; font-size: 0.9rem; color: var(--muted); margin-top: 1rem;
     }
     .note strong { color: var(--success); }
-    footer {
-      text-align: center;
-      margin-top: 3rem;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-    footer a { color: #60a5fa; text-decoration: none; }
-    code {
-      background: rgba(0,0,0,0.3);
-      padding: 0.15rem 0.4rem;
-      border-radius: 4px;
-      font-size: 0.85em;
-    }
+    footer { text-align: center; margin-top: 3rem; color: var(--muted); font-size: 0.85rem; }
+    footer a, .note a { color: #60a5fa; text-decoration: none; }
   </style>
 </head>
 <body>
@@ -147,64 +71,46 @@
     <header>
       <div class="logo">✓</div>
       <h1>Task Manager</h1>
-      <p class="subtitle">Clean, offline Android task manager</p>
+      <p class="subtitle">Offline Android task manager</p>
     </header>
 
     <div class="card">
-      <span class="badge">v1.0.0 · Kotlin + Compose</span>
-      <h2>Download the App</h2>
-      <p>
-        This is a modern, offline-first task manager for Android.
-        Built with Jetpack Compose, Room database, and Material 3.
-      </p>
-      <ul>
-        <li>Create, edit, complete &amp; delete tasks</li>
-        <li>Priority levels (Low / Medium / High)</li>
-        <li>Search + filter (All / Active / Completed)</li>
-        <li>Works completely offline</li>
-        <li>Dark mode support</li>
-      </ul>
+      <span class="badge">v1.1.0 · Android APK</span>
+      <h2>Download on your phone</h2>
+      <p>Tap the button below on your Android phone. That link is a real .apk file, not a zip from GitHub Actions.</p>
 
       <div class="actions">
-        <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/actions" target="_blank" rel="noopener">
-          Download from GitHub Actions
+        <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/latest/download/task-manager.apk">
+          Download APK
         </a>
-        <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app" target="_blank" rel="noopener">
-          View Source
+        <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">
+          Release page
         </a>
       </div>
 
       <div class="note">
-        <strong>How to get the APK:</strong><br />
-        1. Go to the <a href="https://github.com/TTFabianstenq/task-manager-app/actions" style="color:#60a5fa">Actions</a> tab of the repository.<br />
-        2. Open the latest successful workflow run.<br />
-        3. Download the <code>app-debug</code> artifact and unzip it.<br />
-        4. Install the APK on your phone (enable "Install from unknown sources" if needed).<br /><br />
-        <em>Note:</em> The first time you open the project in Android Studio, it generates the Gradle wrapper. After you push the wrapper files, the CI will automatically produce downloadable APKs on every push.
+        <strong>Install on Android:</strong><br />
+        1. Tap Download APK.<br />
+        2. Open the downloaded file.<br />
+        3. If Android blocks it, allow installs from Chrome / Files.<br />
+        4. Install, then open Task Manager.<n        This only works after the latest GitHub Action build succeeds and publishes the release.
       </div>
     </div>
 
     <div class="card">
-      <h2>Build it yourself</h2>
-      <p>Prefer a signed release build or want to customize?</p>
-      <ol style="margin: 0.75rem 0 0 1.25rem; color: var(--muted); font-size: 0.95rem;">
-        <li style="margin-bottom:0.35rem">Clone the repo</li>
-        <li style="margin-bottom:0.35rem">Open in Android Studio (Ladybug or newer)</li>
-        <li style="margin-bottom:0.35rem">Let Gradle sync</li>
-        <li style="margin-bottom:0.35rem">Build → Generate Signed Bundle / APK</li>
-      </ol>
-      <div class="actions">
-        <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app#build-the-apk-yourself" target="_blank" rel="noopener">
-          Full build instructions
-        </a>
-      </div>
+      <h2>What’s in the app</h2>
+      <ul>
+        <li>Add, edit, delete tasks</li>
+        <li>End Task / Reopen</li>
+        <li>Priorities, categories, due dates</li>
+        <li>Overdue highlighting</li>
+        <li>Search + All / Active / Completed filters</li>
+        <li>Works offline</li>
+      </ul>
     </div>
 
     <footer>
-      <p>
-        Source on <a href="https://github.com/TTFabianstenq/task-manager-app">GitHub</a> ·
-        MIT License
-      </p>
+      <p>Source: <a href="https://github.com/TTFabianstenq/task-manager-app">GitHub</a></p>
     </footer>
   </div>
 </body>
