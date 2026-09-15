@@ -9,7 +9,6 @@ import com.taskmanager.app.data.TaskRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -22,6 +21,8 @@ data class TaskUiState(
     val tasks: List<Task> = emptyList(),
     val filter: TaskFilter = TaskFilter.ALL,
     val searchQuery: String = "",
+    val activeCount: Int = 0,
+    val completedCount: Int = 0,
     val isLoading: Boolean = true
 )
 
@@ -32,9 +33,11 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
 
     val uiState: StateFlow<TaskUiState> = combine(
         repository.getAllTasks(),
+        repository.getActiveCount(),
+        repository.getCompletedCount(),
         _filter,
         _searchQuery
-    ) { allTasks, filter, query ->
+    ) { allTasks, activeCount, completedCount, filter, query ->
         val filtered = when (filter) {
             TaskFilter.ALL -> allTasks
             TaskFilter.ACTIVE -> allTasks.filter { !it.isCompleted }
@@ -45,13 +48,16 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         } else {
             filtered.filter {
                 it.title.contains(query, ignoreCase = true) ||
-                    it.description.contains(query, ignoreCase = true)
+                    it.description.contains(query, ignoreCase = true) ||
+                    it.category.contains(query, ignoreCase = true)
             }
         }
         TaskUiState(
             tasks = searched,
             filter = filter,
             searchQuery = query,
+            activeCount = activeCount,
+            completedCount = completedCount,
             isLoading = false
         )
     }.stateIn(
@@ -72,7 +78,8 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         title: String,
         description: String = "",
         priority: Priority = Priority.MEDIUM,
-        dueDate: Long? = null
+        dueDate: Long? = null,
+        category: String = ""
     ) {
         if (title.isBlank()) return
         viewModelScope.launch {
@@ -81,7 +88,8 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
                     title = title.trim(),
                     description = description.trim(),
                     priority = priority,
-                    dueDate = dueDate
+                    dueDate = dueDate,
+                    category = category.trim()
                 )
             )
         }
@@ -93,9 +101,30 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
         }
     }
 
+    /** Toggle complete state. Prefer endTask / reopenTask for clearer intent. */
     fun toggleCompleted(task: Task) {
         viewModelScope.launch {
-            repository.update(task.copy(isCompleted = !task.isCompleted))
+            if (task.isCompleted) {
+                repository.reopenTask(task)
+            } else {
+                repository.endTask(task)
+            }
+        }
+    }
+
+    /** Explicitly end (complete) a task. */
+    fun endTask(task: Task) {
+        if (task.isCompleted) return
+        viewModelScope.launch {
+            repository.endTask(task)
+        }
+    }
+
+    /** Reopen a completed task. */
+    fun reopenTask(task: Task) {
+        if (!task.isCompleted) return
+        viewModelScope.launch {
+            repository.reopenTask(task)
         }
     }
 

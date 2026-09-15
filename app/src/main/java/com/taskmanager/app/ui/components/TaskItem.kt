@@ -2,7 +2,6 @@ package com.taskmanager.app.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,8 +13,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.taskmanager.app.data.Priority
 import com.taskmanager.app.data.Task
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -41,6 +43,8 @@ import java.util.Locale
 fun TaskItem(
     task: Task,
     onToggleComplete: () -> Unit,
+    onEndTask: () -> Unit,
+    onReopenTask: () -> Unit,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -50,12 +54,17 @@ fun TaskItem(
         Priority.LOW -> Color(0xFF43A047)
     }
 
+    val isOverdue = !task.isCompleted && task.dueDate != null && isDateBeforeToday(task.dueDate)
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            containerColor = if (isOverdue)
+                MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.35f)
+            else
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
         )
     ) {
         Row(
@@ -64,7 +73,6 @@ fun TaskItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Priority indicator
             Box(
                 modifier = Modifier
                     .size(10.dp)
@@ -106,13 +114,43 @@ fun TaskItem(
                     )
                 }
 
+                if (task.category.isNotBlank()) {
+                    Text(
+                        text = task.category,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.secondary
+                    )
+                }
+
                 if (task.dueDate != null) {
                     val formatted = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
                         .format(Date(task.dueDate))
                     Text(
-                        text = "Due: $formatted",
+                        text = if (isOverdue) "Overdue: $formatted" else "Due: $formatted",
                         style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
+                        color = if (isOverdue)
+                            MaterialTheme.colorScheme.error
+                        else
+                            MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            // Explicit End Task / Reopen
+            if (task.isCompleted) {
+                IconButton(onClick = onReopenTask) {
+                    Icon(
+                        Icons.Default.Replay,
+                        contentDescription = "Reopen task",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+            } else {
+                IconButton(onClick = onEndTask) {
+                    Icon(
+                        Icons.Default.CheckCircle,
+                        contentDescription = "End task",
+                        tint = Color(0xFF43A047)
                     )
                 }
             }
@@ -134,4 +172,21 @@ fun TaskItem(
             }
         }
     }
+}
+
+private fun isDateBeforeToday(epochMillis: Long): Boolean {
+    val due = Calendar.getInstance().apply {
+        timeInMillis = epochMillis
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+    val today = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+    return due.before(today)
 }
