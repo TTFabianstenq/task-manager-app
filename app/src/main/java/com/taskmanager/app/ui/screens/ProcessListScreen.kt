@@ -3,6 +3,7 @@ package com.taskmanager.app.ui.screens
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -40,9 +41,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.taskmanager.app.process.AppProcess
 import com.taskmanager.app.process.ProcessViewModel
 import java.text.DateFormat
@@ -71,130 +74,142 @@ fun ProcessListScreen(viewModel: ProcessViewModel) {
         matchesQuery && matchesSystem
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Task Manager") },
-                actions = {
-                    IconButton(onClick = { viewModel.refresh() }) {
-                        Icon(Icons.Default.Refresh, contentDescription = "Refresh")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = { Text("Task Manager") },
+                    actions = {
+                        IconButton(onClick = { viewModel.refresh() }) {
+                            Icon(Icons.Default.Refresh, contentDescription = "Refresh")
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primaryContainer,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 )
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbar) }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            state.memory?.let { mem ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text("RAM", style = MaterialTheme.typography.labelMedium)
-                        Text(
-                            "${mem.usedMb} MB used / ${mem.totalMb} MB",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold
+            },
+            snackbarHost = { SnackbarHost(snackbar) }
+        ) { padding ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+            ) {
+                state.memory?.let { mem ->
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        LinearProgressIndicator(
-                            progress = { mem.usedPercent / 100f },
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Text(
-                            "${mem.availMb} MB free · ${mem.usedPercent}% used",
-                            style = MaterialTheme.typography.bodySmall
-                        )
-                    }
-                }
-            }
-
-            if (!state.hasUsageAccess) {
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer
-                    )
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        Text(
-                            "Usage access needed",
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                        Text(
-                            "Android hides other apps' processes unless you grant Usage access.",
-                            color = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Button(
-                            onClick = {
-                                context.startActivity(
-                                    Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                                )
-                            }
-                        ) {
-                            Text("Open settings")
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text("RAM", style = MaterialTheme.typography.labelMedium)
+                            Text(
+                                "${mem.usedMb} MB used / ${mem.totalMb} MB",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            LinearProgressIndicator(
+                                progress = { mem.usedPercent / 100f },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Text(
+                                "${mem.availMb} MB free · ${mem.usedPercent}% used",
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-            }
 
-            OutlinedTextField(
-                value = state.query,
-                onValueChange = viewModel::setQuery,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                placeholder = { Text("Search apps") },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                singleLine = true
-            )
+                if (!state.hasUsageAccess) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer
+                        )
+                    ) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                "Usage access needed",
+                                fontWeight = FontWeight.SemiBold,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            Text(
+                                "Android hides other apps' processes unless you grant Usage access.",
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Button(
+                                onClick = {
+                                    context.startActivity(
+                                        Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+                                    )
+                                }
+                            ) {
+                                Text("Open settings")
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
 
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                FilterChip(
-                    selected = state.showSystem,
-                    onClick = { viewModel.toggleSystem() },
-                    label = { Text(if (state.showSystem) "System shown" else "Hide system") }
+                OutlinedTextField(
+                    value = state.query,
+                    onValueChange = viewModel::setQuery,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    placeholder = { Text("Search apps") },
+                    leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                    singleLine = true
                 )
-                Text(
-                    "${filtered.size} apps",
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
 
-            LazyColumn(
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(filtered, key = { it.packageName }) { app ->
-                    ProcessRow(
-                        app = app,
-                        onEnd = { viewModel.endProcess(app) }
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    FilterChip(
+                        selected = state.showSystem,
+                        onClick = { viewModel.toggleSystem() },
+                        label = { Text(if (state.showSystem) "System shown" else "Hide system") }
                     )
+                    Text(
+                        "${filtered.size} apps",
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+
+                LazyColumn(
+                    contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 48.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(filtered, key = { it.packageName }) { app ->
+                        ProcessRow(
+                            app = app,
+                            onEnd = { viewModel.endProcess(app) }
+                        )
+                    }
                 }
             }
         }
+
+        Text(
+            text = "made by fabianstenq",
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 12.dp)
+                .alpha(0.45f),
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     }
 }
 
