@@ -6,13 +6,27 @@ import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Process
-import android.provider.Settings
 
 class ProcessRepository(private val context: Context) {
 
     private val activityManager =
         context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+
+    private val protectedPackages = setOf(
+        "android",
+        "com.android.systemui",
+        "com.android.settings",
+        "com.android.phone",
+        "com.android.launcher",
+        "com.android.launcher3",
+        "com.google.android.gms",
+        "com.google.android.gsf",
+        "com.google.android.permissioncontroller",
+        context.packageName
+    )
 
     fun hasUsageAccess(): Boolean {
         val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
@@ -23,9 +37,6 @@ class ProcessRepository(private val context: Context) {
         )
         return mode == AppOpsManager.MODE_ALLOWED
     }
-
-    fun usageAccessIntent(): Intent =
-        Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
 
     fun deviceMemory(): DeviceMemory {
         val info = ActivityManager.MemoryInfo()
@@ -42,13 +53,9 @@ class ProcessRepository(private val context: Context) {
         val now = System.currentTimeMillis()
         val runningByPkg = runningProcessesByPackage()
         val lastUsed = lastUsedByPackage(now)
+        val launchable = launchablePackages(pm)
 
-        val launchable = pm.queryIntentActivities(
-            Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER),
-            0
-        ).map { it.activityInfo.packageName }.toSet()
-
-        val packages = (launchable + runningByPkg.keys + lastUsed.keys).toSet()
+        val packages = launchable + runningByPkg.keys + lastUsed.keys
 
         return packages.mapNotNull { pkg ->
             if (pkg == context.packageName) return@mapNotNull null
@@ -64,6 +71,7 @@ class ProcessRepository(private val context: Context) {
             if (running == null && !recentlyUsed && !launchable.contains(pkg)) {
                 return@mapNotNull null
             }
+            val protectedPkg = pkg in protectedPackages || pkg.startsWith("com.android.")
             AppProcess(
                 packageName = pkg,
                 label = pm.getApplicationLabel(appInfo).toString(),
@@ -71,23 +79,26 @@ class ProcessRepository(private val context: Context) {
                 lastUsedMs = used,
                 importance = running?.importanceLabel ?: if (recentlyUsed) "Recent" else "Installed",
                 isSystem = isSystem,
-                canEnd = running != null || recentlyUsed
+                canEnd = !protectedPkg && (running != null || recentlyUsed),
+                memoryMb = running?.pid?.let { memoryForPid(it) }
             )
         }.sortedWith(
             compareByDescending<AppProcess> { it.pid != null }
+                .thenByDescending { it.memoryMb ?: -1 }
                 .thenByDescending { it.lastUsedMs }
         )
     }
 
     fun endProcess(packageName: String): String {
-        if (packageName == context.packageName) {
-            return "Can't end this app from itself"
+        if (packageName == context.packageName) return "Can't end this app from itself"
+        if (packageName in protectedPackages || packageName.startsWith("com.android.")) {
+            return "Blocked: system process"
         }
         return try {
             activityManager.killBackgroundProcesses(packageName)
-            "Asked Android to end background processes for $packageName.\nForeground apps may stay open — Android blocks force-stop without root."
+            "Ended background processes for ${packageName.substringAfterLast('.')}"
         } catch (e: Exception) {
-            "Failed: ${e.message}"
+            "Failed: ${e.message ?: "unknown error"}"
         }
     }
 
@@ -95,6 +106,26 @@ class ProcessRepository(private val context: Context) {
         val pid: Int,
         val importanceLabel: String
     )
+
+    private fun launchablePackages(pm: PackageManager): Set<String> {
+        val intent = Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER)
+        val resolved = if (Build.VERSION.SDK_INT >= 33) {
+            pm.queryIntentActivities(intent, PackageManager.ResolveInfoFlags.of(0))
+        } else {
+            @Suppress("DEPRECATION")
+            pm.queryIntentActivities(intent, 0)
+        }
+        return resolved.map { it.activityInfo.packageName }.toSet()
+    }
+
+    private fun memoryForPid(pid: Int): Int? {
+        return try {
+            val info = activityManager.getProcessMemoryInfo(intArrayOf(pid))
+            if (info.isEmpty()) null else (info[0].totalPss / 1024)
+        } catch (_: Exception) {
+            null
+        }
+    }
 
     private fun runningProcessesByPackage(): Map<String, Running> {
         val map = mutableMapOf<String, Running>()
@@ -115,10 +146,7 @@ class ProcessRepository(private val context: Context) {
                 else -> "Background"
             }
             for (pkg in pkgs) {
-                val existing = map[pkg]
-                if (existing == null || proc.pid != 0) {
-                    map[pkg] = Running(proc.pid, label)
-                }
+                map[pkg] = Running(proc.pid, label)
             }
         }
         return map
@@ -132,8 +160,6 @@ class ProcessRepository(private val context: Context) {
             now - 6L * 60L * 60L * 1000L,
             now
         ) ?: return emptyMap()
-        return stats
-            .filter { it.lastTimeUsed > 0 }
-            .associate { it.packageName to it.lastTimeUsed }
+        return stats.filter { it.lastTimeUsed > 0 }.associate { it.packageName to it.lastTimeUsed }
     }
 }

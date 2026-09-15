@@ -28,9 +28,13 @@ class ProcessViewModel(
         _ui.update { it.copy(showSystem = !it.showSystem) }
     }
 
+    fun setFilter(filter: ProcessFilter) {
+        _ui.update { it.copy(filter = filter) }
+    }
+
     fun refresh() {
         viewModelScope.launch(Dispatchers.Default) {
-            _ui.update { it.copy(isLoading = true, message = null) }
+            _ui.update { it.copy(isLoading = true) }
             val memory = repository.deviceMemory()
             val hasAccess = repository.hasUsageAccess()
             val apps = repository.listApps()
@@ -48,13 +52,11 @@ class ProcessViewModel(
     fun endProcess(app: AppProcess) {
         viewModelScope.launch(Dispatchers.Default) {
             val result = repository.endProcess(app.packageName)
-            val apps = repository.listApps()
-            val memory = repository.deviceMemory()
             _ui.update {
                 it.copy(
                     message = result,
-                    apps = apps,
-                    memory = memory
+                    apps = repository.listApps(),
+                    memory = repository.deviceMemory()
                 )
             }
         }

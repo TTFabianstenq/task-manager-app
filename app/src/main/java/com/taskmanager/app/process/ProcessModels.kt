@@ -1,5 +1,7 @@
 package com.taskmanager.app.process
 
+enum class ProcessFilter { ALL, RECENT }
+
 data class DeviceMemory(
     val totalMb: Long,
     val availMb: Long,
@@ -14,7 +16,8 @@ data class AppProcess(
     val lastUsedMs: Long,
     val importance: String,
     val isSystem: Boolean,
-    val canEnd: Boolean
+    val canEnd: Boolean,
+    val memoryMb: Int? = null
 )
 
 data class ProcessUiState(
@@ -23,6 +26,7 @@ data class ProcessUiState(
     val hasUsageAccess: Boolean = false,
     val query: String = "",
     val showSystem: Boolean = false,
+    val filter: ProcessFilter = ProcessFilter.ALL,
     val message: String? = null,
     val isLoading: Boolean = true
 )
