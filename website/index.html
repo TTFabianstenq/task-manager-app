@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Task Manager — Download APK</title>
   <style>
-    :root { --bg:#0f1419; --card:#1a2332; --primary:#3b82f6; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --success:#22c55e; --warn:#fbbf24; }
+    :root { --bg:#0f1419; --card:#1a2332; --primary:#3b82f6; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --success:#22c55e; }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
     .container{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}
@@ -14,13 +14,11 @@
     .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem}
     .card h2{font-size:1.15rem;margin-bottom:.6rem}
     .card p,.card li{color:var(--muted);font-size:.95rem}
-    .card ol,.card ul{margin:.6rem 0 0 1.2rem}
-    .card li{margin-bottom:.35rem}
+    .card ul{margin:.6rem 0 0 1.2rem}
     .btn{display:block;text-align:center;background:var(--primary);color:#fff;font-weight:700;padding:1rem;border-radius:10px;text-decoration:none;margin-top:.75rem}
     .btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
-    .warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:1rem;color:var(--muted);font-size:.92rem;margin-top:1rem}
-    .warn strong{color:var(--warn)}
-    a{color:#60a5fa}
+    .ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:1rem;color:var(--muted);font-size:.92rem;margin-top:1rem}
+    .ok strong{color:var(--success)}
   </style>
 </head>
 <body>
@@ -32,24 +30,21 @@
 
     <div class="card">
       <h2>Download</h2>
-      <p>Chrome on phones often says “Download failed” on GitHub APKs even when the file is already in Downloads.</p>
-      <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk">Download APK</a>
-      <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">Open GitHub release (tap the .apk file there)</a>
+      <p>Use the GitHub release page. Tap <strong>task-manager.apk</strong> under Assets. That path works on phones. The old site direct-link failed in Chrome.</p>
+      <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">Open GitHub release</a>
+      <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk">Direct APK link (can fail in Chrome)</a>
+      <div class="ok">
+        <strong>Confirmed working:</strong> GitHub release → tap <code>task-manager.apk</code> → install.
+      </div>
     </div>
 
     <div class="card">
-      <h2>If it says Download failed</h2>
-      <ol>
-        <li>Open the <strong>Files</strong> or <strong>Downloads</strong> app. Look for <code>task-manager.apk</code>.</li>
-        <li>If it is there (~16–17 MB), tap it and install. Ignore Chrome.</li>
-        <li>If it is missing or 0 bytes, delete it.</li>
-        <li>Open the release page above, then tap <strong>task-manager.apk</strong> under Assets. Do not use the site button.</li>
-        <li>Try Firefox or Samsung Internet instead of Chrome.</li>
-        <li>Or download on a computer and send the APK to your phone (Drive, Telegram Saved Messages, USB).</li>
-      </ol>
-      <div class="warn">
-        <strong>This is not your Wi‑Fi dying at the end.</strong> Chrome + GitHub’s redirect is a known mobile fail. The APK itself is valid.
-      </div>
+      <h2>Install</h2>
+      <ul>
+        <li>Allow install from that source if Android asks</li>
+        <li>Open Task Manager</li>
+        <li>Use End Task to complete a task</li>
+      </ul>
     </div>
   </div>
 </body>
