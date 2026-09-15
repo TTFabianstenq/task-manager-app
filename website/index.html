@@ -4,114 +4,53 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Task Manager — Download APK</title>
-  <meta name="description" content="Download the Task Manager Android APK." />
   <style>
-    :root {
-      --bg: #0f1419;
-      --card: #1a2332;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --border: #2d3748;
-      --success: #22c55e;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    .container { max-width: 720px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
-    header { text-align: center; margin-bottom: 2.5rem; padding-top: 2rem; }
-    .logo {
-      width: 72px; height: 72px;
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border-radius: 18px; display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.25rem; font-size: 2rem;
-    }
-    h1 { font-size: 2.25rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
-    .subtitle { color: var(--muted); font-size: 1.1rem; }
-    .card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 16px; padding: 1.75rem; margin-bottom: 1.5rem;
-    }
-    .card h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
-    .card p, .card li { color: var(--muted); font-size: 0.95rem; }
-    .card ul { margin: 0.75rem 0 0 1.25rem; }
-    .card li { margin-bottom: 0.35rem; }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      background: var(--primary); color: white; font-weight: 600; font-size: 1.05rem;
-      padding: 1rem 1.5rem; border-radius: 10px; text-decoration: none;
-      min-height: 48px; width: 100%;
-    }
-    .btn:hover { background: var(--primary-hover); }
-    .btn-secondary {
-      background: transparent; border: 1px solid var(--border); color: var(--text);
-    }
-    .actions { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
-    .badge {
-      display: inline-block; background: rgba(59, 130, 246, 0.15); color: #60a5fa;
-      font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; margin-bottom: 0.75rem;
-    }
-    .note {
-      background: rgba(34, 197, 94, 0.08); border: 1px solid rgba(34, 197, 94, 0.25);
-      border-radius: 10px; padding: 1rem 1.25rem; font-size: 0.9rem; color: var(--muted); margin-top: 1rem;
-    }
-    .note strong { color: var(--success); }
-    footer { text-align: center; margin-top: 3rem; color: var(--muted); font-size: 0.85rem; }
-    footer a, .note a { color: #60a5fa; text-decoration: none; }
+    :root { --bg:#0f1419; --card:#1a2332; --primary:#3b82f6; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --success:#22c55e; --warn:#fbbf24; }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+    .container{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}
+    header{text-align:center;margin-bottom:2rem;padding-top:1.5rem}
+    h1{font-size:2rem;margin-bottom:.4rem}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem}
+    .card h2{font-size:1.15rem;margin-bottom:.6rem}
+    .card p,.card li{color:var(--muted);font-size:.95rem}
+    .card ol,.card ul{margin:.6rem 0 0 1.2rem}
+    .card li{margin-bottom:.35rem}
+    .btn{display:block;text-align:center;background:var(--primary);color:#fff;font-weight:700;padding:1rem;border-radius:10px;text-decoration:none;margin-top:.75rem}
+    .btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
+    .warn{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);border-radius:10px;padding:1rem;color:var(--muted);font-size:.92rem;margin-top:1rem}
+    .warn strong{color:var(--warn)}
+    a{color:#60a5fa}
   </style>
 </head>
 <body>
   <div class="container">
     <header>
-      <div class="logo">✓</div>
-      <h1>Task Manager</h1>
-      <p class="subtitle">Offline Android task manager</p>
+      <h1>Task Manager APK</h1>
+      <p style="color:#94a3b8">v1.1.0 · 16.9 MB · Android</p>
     </header>
 
     <div class="card">
-      <span class="badge">v1.1.0 · 16.1 MB APK · build succeeded</span>
-      <h2>Download on your phone</h2>
-      <p>Tap the button. It downloads <code>task-manager.apk</code> (~16 MB). Then open the file and install it.</p>
-
-      <div class="actions">
-        <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk" download="task-manager.apk">
-          Download APK
-        </a>
-        <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">
-          Open release page
-        </a>
-      </div>
-
-      <div class="note">
-        <strong>Install:</strong><br />
-        1. Tap Download APK.<br />
-        2. Open the downloaded file.<br />
-        3. Allow install from this source if Android asks.<br />
-        4. Open Task Manager.
-      </div>
+      <h2>Download</h2>
+      <p>Chrome on phones often says “Download failed” on GitHub APKs even when the file is already in Downloads.</p>
+      <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk">Download APK</a>
+      <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">Open GitHub release (tap the .apk file there)</a>
     </div>
 
     <div class="card">
-      <h2>Included</h2>
-      <ul>
-        <li>Add, edit, delete tasks</li>
-        <li>End Task / Reopen</li>
-        <li>Priorities, categories, due dates</li>
-        <li>Overdue highlighting</li>
-        <li>Search + All / Active / Completed</li>
-        <li>Works offline</li>
-      </ul>
+      <h2>If it says Download failed</h2>
+      <ol>
+        <li>Open the <strong>Files</strong> or <strong>Downloads</strong> app. Look for <code>task-manager.apk</code>.</li>
+        <li>If it is there (~16–17 MB), tap it and install. Ignore Chrome.</li>
+        <li>If it is missing or 0 bytes, delete it.</li>
+        <li>Open the release page above, then tap <strong>task-manager.apk</strong> under Assets. Do not use the site button.</li>
+        <li>Try Firefox or Samsung Internet instead of Chrome.</li>
+        <li>Or download on a computer and send the APK to your phone (Drive, Telegram Saved Messages, USB).</li>
+      </ol>
+      <div class="warn">
+        <strong>This is not your Wi‑Fi dying at the end.</strong> Chrome + GitHub’s redirect is a known mobile fail. The APK itself is valid.
+      </div>
     </div>
-
-    <footer>
-      <p>Source: <a href="https://github.com/TTFabianstenq/task-manager-app">GitHub</a></p>
-    </footer>
   </div>
 </body>
 </html>
