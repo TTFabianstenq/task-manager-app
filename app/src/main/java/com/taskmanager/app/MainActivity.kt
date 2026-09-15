@@ -9,11 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.taskmanager.app.data.TaskDatabase
-import com.taskmanager.app.data.TaskRepository
-import com.taskmanager.app.ui.TaskViewModel
-import com.taskmanager.app.ui.TaskViewModelFactory
-import com.taskmanager.app.ui.screens.TaskListScreen
+import com.taskmanager.app.process.ProcessRepository
+import com.taskmanager.app.process.ProcessViewModel
+import com.taskmanager.app.process.ProcessViewModelFactory
+import com.taskmanager.app.ui.screens.ProcessListScreen
 import com.taskmanager.app.ui.theme.TaskManagerTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,9 +20,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val database = TaskDatabase.getInstance(applicationContext)
-        val repository = TaskRepository(database.taskDao())
-        val factory = TaskViewModelFactory(repository)
+        val repository = ProcessRepository(applicationContext)
+        val factory = ProcessViewModelFactory(repository)
 
         setContent {
             TaskManagerTheme {
@@ -31,10 +29,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val viewModel: TaskViewModel = viewModel(factory = factory)
-                    TaskListScreen(viewModel = viewModel)
+                    val viewModel: ProcessViewModel = viewModel(factory = factory)
+                    ProcessListScreen(viewModel = viewModel)
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 }
