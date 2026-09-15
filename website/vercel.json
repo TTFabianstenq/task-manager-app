@@ -1,0 +1,17 @@
+{
+  "redirects": [
+    {
+      "source": "/task-manager.apk",
+      "destination": "https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk",
+      "permanent": false
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" }
+      ]
+    }
+  ]
+}

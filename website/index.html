@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Manager — Download</title>
+  <title>Task Manager — Download APK</title>
   <meta name="description" content="Download the Task Manager Android APK." />
   <style>
     :root {
@@ -40,19 +40,19 @@
     }
     .card h2 { font-size: 1.25rem; margin-bottom: 0.75rem; }
     .card p, .card li { color: var(--muted); font-size: 0.95rem; }
-    .card ol, .card ul { margin: 0.75rem 0 0 1.25rem; }
+    .card ul { margin: 0.75rem 0 0 1.25rem; }
     .card li { margin-bottom: 0.35rem; }
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       background: var(--primary); color: white; font-weight: 600; font-size: 1.05rem;
       padding: 1rem 1.5rem; border-radius: 10px; text-decoration: none;
-      min-height: 48px;
+      min-height: 48px; width: 100%;
     }
     .btn:hover { background: var(--primary-hover); }
     .btn-secondary {
       background: transparent; border: 1px solid var(--border); color: var(--text);
     }
-    .actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+    .actions { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.25rem; }
     .badge {
       display: inline-block; background: rgba(59, 130, 246, 0.15); color: #60a5fa;
       font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.6rem; border-radius: 999px; margin-bottom: 0.75rem;
@@ -75,37 +75,36 @@
     </header>
 
     <div class="card">
-      <span class="badge">v1.1.0 · Android APK</span>
+      <span class="badge">v1.1.0 · 16.1 MB APK · build succeeded</span>
       <h2>Download on your phone</h2>
-      <p>Tap the button below on your Android phone. That link is a real .apk file, not a zip from GitHub Actions.</p>
+      <p>Tap the button. It downloads <code>task-manager.apk</code> (~16 MB). Then open the file and install it.</p>
 
       <div class="actions">
-        <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/latest/download/task-manager.apk">
+        <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk" download="task-manager.apk">
           Download APK
         </a>
         <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">
-          Release page
+          Open release page
         </a>
       </div>
 
       <div class="note">
-        <strong>Install on Android:</strong><br />
+        <strong>Install:</strong><br />
         1. Tap Download APK.<br />
         2. Open the downloaded file.<br />
-        3. If Android blocks it, allow installs from Chrome / Files.<br />
-        4. Install, then open Task Manager.<br /><br />
-        This only works after the latest GitHub Action build succeeds and publishes the release.
+        3. Allow install from this source if Android asks.<br />
+        4. Open Task Manager.
       </div>
     </div>
 
     <div class="card">
-      <h2>What’s in the app</h2>
+      <h2>Included</h2>
       <ul>
         <li>Add, edit, delete tasks</li>
         <li>End Task / Reopen</li>
         <li>Priorities, categories, due dates</li>
         <li>Overdue highlighting</li>
-        <li>Search + All / Active / Completed filters</li>
+        <li>Search + All / Active / Completed</li>
         <li>Works offline</li>
       </ul>
     </div>
