@@ -4,52 +4,51 @@ A modern, offline-first Android task manager built with **Kotlin**, **Jetpack Co
 
 ## Features
 
-- Create, edit, delete, and complete tasks
+- Create, edit, delete tasks
+- **End Task** (explicit complete) and **Reopen** actions
+- Checkbox toggle for quick complete/reopen
 - Priority levels (Low / Medium / High)
-- Due dates
-- Search and filter (All / Active / Completed)
-- Material 3 design with dark mode support
-- Local Room database (no internet required)
-- Clean architecture (UI → ViewModel → Repository → Room)
+- Due dates with date picker + overdue highlighting
+- Optional categories
+- Search (title, description, category)
+- Filters: All / Active / Completed
+- Live stats in the top bar (active · done)
+- Confirm before deleting a task or clearing completed
+- Material 3 design with dark mode / dynamic color
+- Fully offline (Room database)
 
 ## Requirements
 
 - Android Studio Ladybug (2024.2.1) or newer
 - JDK 17+
-- Android SDK 34+
+- Android SDK 35
 - Min SDK 26 (Android 8.0)
 
-## Build the APK yourself
+## Build the APK
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/TTFabianstenq/task-manager-app.git
-   cd task-manager-app
-   ```
+### Via GitHub Actions (easiest)
 
-2. Open the project in Android Studio.
+1. Go to [Actions](https://github.com/TTFabianstenq/task-manager-app/actions)
+2. Open the latest **Build APK** run
+3. Download the **TaskManager-debug** artifact
+4. Unzip and install the APK on your phone
 
-3. Let Gradle sync and download dependencies.
+### Locally
 
-4. Build a release APK:
-   - Menu → Build → Generate Signed Bundle / APK
-   - Or from terminal:
-     ```bash
-     ./gradlew assembleRelease
-     ```
-   - Output: `app/build/outputs/apk/release/app-release-unsigned.apk`
+```bash
+git clone https://github.com/TTFabianstenq/task-manager-app.git
+cd task-manager-app
+# Open in Android Studio once (generates wrapper if needed), or rely on CI
+./gradlew assembleDebug
+```
 
-5. (Recommended) Sign the APK for installation on a real device.
+Output: `app/build/outputs/apk/debug/app-debug.apk`
 
-## GitHub Actions
+For a signed release APK use **Build → Generate Signed Bundle / APK** in Android Studio.
 
-A workflow is included (`.github/workflows/build-apk.yml`) that builds a debug APK on every push to `main` and uploads it as an artifact. You can download it from the Actions tab.
+## Download site
 
-For signed release APKs, configure signing secrets in the repository settings.
-
-## Download Site
-
-A simple download page is available via Vercel (see the website folder or the deployed site).
+https://task-manager-download.vercel.app
 
 ## License
 
