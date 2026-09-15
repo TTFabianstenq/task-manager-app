@@ -3,48 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Task Manager — Download APK</title>
+  <title>Task Manager APK</title>
   <style>
-    :root { --bg:#0f1419; --card:#1a2332; --primary:#3b82f6; --text:#e2e8f0; --muted:#94a3b8; --border:#2d3748; --success:#22c55e; }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
-    .container{max-width:720px;margin:0 auto;padding:2rem 1.25rem 4rem}
-    header{text-align:center;margin-bottom:2rem;padding-top:1.5rem}
-    h1{font-size:2rem;margin-bottom:.4rem}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem}
-    .card h2{font-size:1.15rem;margin-bottom:.6rem}
-    .card p,.card li{color:var(--muted);font-size:.95rem}
-    .card ul{margin:.6rem 0 0 1.2rem}
-    .btn{display:block;text-align:center;background:var(--primary);color:#fff;font-weight:700;padding:1rem;border-radius:10px;text-decoration:none;margin-top:.75rem}
-    .btn-secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
-    .ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:1rem;color:var(--muted);font-size:.92rem;margin-top:1rem}
-    .ok strong{color:var(--success)}
+    body{font-family:system-ui,sans-serif;background:#0f1419;color:#e2e8f0;margin:0;padding:2rem 1.25rem}
+    .wrap{max-width:720px;margin:0 auto}
+    .card{background:#1a2332;border:1px solid #2d3748;border-radius:16px;padding:1.5rem;margin:1rem 0}
+    a.btn{display:block;text-align:center;background:#3b82f6;color:#fff;font-weight:700;padding:1rem;border-radius:10px;text-decoration:none;margin-top:.75rem}
+    .sec{display:block;text-align:center;border:1px solid #2d3748;color:#e2e8f0;padding:1rem;border-radius:10px;text-decoration:none;margin-top:.75rem}
+    p,li{color:#94a3b8}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Task Manager APK</h1>
-      <p style="color:#94a3b8">v1.1.0 · 16.9 MB · Android</p>
-    </header>
-
+  <div class="wrap">
+    <h1>Task Manager</h1>
+    <p>Android process list + End process. Not a to-do list.</p>
     <div class="card">
-      <h2>Download</h2>
-      <p>Use the GitHub release page. Tap <strong>task-manager.apk</strong> under Assets. That path works on phones. The old site direct-link failed in Chrome.</p>
+      <p>Download from the GitHub release. Tap <strong>task-manager.apk</strong> under Assets. Wait for the new 2.0 build to finish first.</p>
       <a class="btn" href="https://github.com/TTFabianstenq/task-manager-app/releases/tag/apk-latest">Open GitHub release</a>
-      <a class="btn btn-secondary" href="https://github.com/TTFabianstenq/task-manager-app/releases/download/apk-latest/task-manager.apk">Direct APK link (can fail in Chrome)</a>
-      <div class="ok">
-        <strong>Confirmed working:</strong> GitHub release → tap <code>task-manager.apk</code> → install.
-      </div>
+      <a class="sec" href="https://github.com/TTFabianstenq/task-manager-app/actions">Build status</a>
     </div>
-
     <div class="card">
-      <h2>Install</h2>
+      <h2>What it does</h2>
       <ul>
-        <li>Allow install from that source if Android asks</li>
-        <li>Open Task Manager</li>
-        <li>Use End Task to complete a task</li>
+        <li>Shows RAM used / free</li>
+        <li>Lists apps / processes Android will expose</li>
+        <li>End button calls killBackgroundProcesses</li>
+        <li>Needs Usage access in Settings for a useful list</li>
       </ul>
+      <p>Android will not let a normal app force-stop foreground apps. That needs root or a system app.</p>
     </div>
   </div>
 </body>
