@@ -16,7 +16,7 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE isCompleted = 0 ORDER BY priority DESC, createdAt DESC")
     fun getActiveTasks(): Flow<List<Task>>
 
-    @Query("SELECT * FROM tasks WHERE isCompleted = 1 ORDER BY createdAt DESC")
+    @Query("SELECT * FROM tasks WHERE isCompleted = 1 ORDER BY completedAt DESC, createdAt DESC")
     fun getCompletedTasks(): Flow<List<Task>>
 
     @Query("SELECT * FROM tasks WHERE id = :id")
@@ -33,4 +33,10 @@ interface TaskDao {
 
     @Query("DELETE FROM tasks WHERE isCompleted = 1")
     suspend fun deleteCompleted()
+
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 0")
+    fun getActiveCount(): Flow<Int>
+
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1")
+    fun getCompletedCount(): Flow<Int>
 }

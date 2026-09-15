@@ -15,6 +15,8 @@ data class Task(
     val description: String = "",
     val isCompleted: Boolean = false,
     val priority: Priority = Priority.MEDIUM,
-    val dueDate: Long? = null, // epoch millis
-    val createdAt: Long = System.currentTimeMillis()
+    val dueDate: Long? = null,
+    val createdAt: Long = System.currentTimeMillis(),
+    val completedAt: Long? = null,
+    val category: String = ""
 )
