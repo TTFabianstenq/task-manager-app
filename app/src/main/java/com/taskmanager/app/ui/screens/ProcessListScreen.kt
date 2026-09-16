@@ -1,6 +1,7 @@
 package com.taskmanager.app.ui.screens
 
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -60,6 +61,14 @@ import com.taskmanager.app.process.ProcessViewModel
 import java.text.DateFormat
 import java.util.Date
 
+private fun openUsageAccessSettings(packageName: String): Intent {
+    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    intent.putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+    intent.data = Uri.parse("package:$packageName")
+    return intent
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProcessListScreen(viewModel: ProcessViewModel) {
@@ -68,6 +77,8 @@ fun ProcessListScreen(viewModel: ProcessViewModel) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var pendingEnd by remember { mutableStateOf<AppProcess?>(null) }
+    var showPermissionDialog by remember { mutableStateOf(false) }
+    var askedOnce by remember { mutableStateOf(false) }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -75,6 +86,16 @@ fun ProcessListScreen(viewModel: ProcessViewModel) {
         }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    LaunchedEffect(state.isLoading, state.hasUsageAccess) {
+        if (!state.isLoading && !state.hasUsageAccess && !askedOnce) {
+            showPermissionDialog = true
+            askedOnce = true
+        }
+        if (state.hasUsageAccess) {
+            showPermissionDialog = false
+        }
     }
 
     LaunchedEffect(state.message) {
@@ -162,23 +183,21 @@ fun ProcessListScreen(viewModel: ProcessViewModel) {
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                "Usage access needed",
+                                "Permission needed",
                                 fontWeight = FontWeight.SemiBold,
                                 color = MaterialTheme.colorScheme.onErrorContainer
                             )
                             Text(
-                                "Android hides other apps unless you grant Usage access.",
+                                "Allow Usage access for Task Manager or the process list stays empty.",
                                 color = MaterialTheme.colorScheme.onErrorContainer
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Button(
                                 onClick = {
-                                    val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    context.startActivity(intent)
+                                    context.startActivity(openUsageAccessSettings(context.packageName))
                                 }
                             ) {
-                                Text("Open settings")
+                                Text("Grant permission")
                             }
                         }
                     }
@@ -241,6 +260,33 @@ fun ProcessListScreen(viewModel: ProcessViewModel) {
                 .alpha(0.45f),
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onBackground
+        )
+    }
+
+    if (showPermissionDialog && !state.hasUsageAccess) {
+        AlertDialog(
+            onDismissRequest = { showPermissionDialog = false },
+            title = { Text("Allow Usage access") },
+            text = {
+                Text(
+                    "Android will not show a normal permission popup for this.\n\n" +
+                        "1. Tap Allow\n" +
+                        "2. Find Task Manager in the list\n" +
+                        "3. Turn Usage access on\n" +
+                        "4. Come back here"
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        context.startActivity(openUsageAccessSettings(context.packageName))
+                        showPermissionDialog = false
+                    }
+                ) { Text("Allow") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPermissionDialog = false }) { Text("Not now") }
+            }
         )
     }
 
